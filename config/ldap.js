@@ -1,8 +1,8 @@
-var protocol = "ldap";
-var ipaddr = "10.57.1.31";
+
+var ipaddr = "192.168.126.110";
 var port = "389";
-var connectionString = protocol + "://" + ipaddr + ":" + port;
-var rootDN = "cn=ldapadm,dc=excise,dc=go,dc=th";
+var connectionString = "ldap://" + ipaddr + ":" + port;
+var rootDN = "cn=Manager,dc=excise,dc=go,dc=th";
 var rootPassword = "P@ssw0rd";
 var baseDN = "ou=People,dc=excise,dc=go,dc=th";
 

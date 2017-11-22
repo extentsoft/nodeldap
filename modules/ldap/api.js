@@ -1,24 +1,41 @@
 var ldapCfg = require('../../config/ldap.js');
 var ldap = require('ldapjs');
 
-var search = function(filterOrNewDN, scope, attribute){
+var search = function(filter, scope, attribute){
   var opts = {
-    filter: filterOrNewDN,
-    scope: 'sub',
-    attributes: []
+    filter: filter,
+    scope: scope,
+    attributes: attribute
   }
   var client = ldap.createClient({
     url: ldapCfg.connectionString
   });
-  client.bind(rootDN, rootPassword, function(err) {
+  client.bind(ldapCfg.rootDN, ldapCfg.rootPassword, function(err) {
     console.log(err);
   });
-  client.search(baseDN, opts, function(err, res) {
+  client.search(ldapCfg.baseDN, opts, function(err, res) {
     console.log("serach");
-    client.unbind(function(err){
-        console.log(err);
+
+    res.on('searchEntry', function(entry){
+        console.log(JSON.stringify(entry.object));
+        client.unbind(function(err){
+            console.log(err);
+            return "search";
+        });
     });
-    return "search";
+
+    res.on('error', function(err){
+      console.error('error: ' + err.message);
+    });
+
+    res.on('end', function(result){
+      console.log('status: ' + result.status);
+    });
+
+
+
+
+
   });
 }
 
